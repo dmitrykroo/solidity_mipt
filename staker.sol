@@ -74,7 +74,9 @@ contract Staker {
     function withdraw() public stakingClosed {
         require(stakerBalance < threshold, "Threshold reached, withdrawal closed");
         require(_balances[msg.sender] > 0, "Balance for requested address is zero");
-        payable(msg.sender).transfer(_balances[msg.sender]);
+        uint balance = _balances[msg.sender];
+        _balances[msg.sender] = 0;
+        payable(msg.sender).transfer(balance);
     }
 
     function _complete() internal {
